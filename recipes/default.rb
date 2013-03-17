@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: mxunit
+# Cookbook Name:: cloudy
 # Recipe:: default
 #
 # Copyright 2012, Nathan Mische
@@ -23,43 +23,34 @@ package "unzip" do
   action :install
 end
 
-# Download MXUnit
+# Download cloudy
 
-remote_file "#{Chef::Config['file_cache_path']}/mxunit-2.1.1.zip" do
-  source "#{node['mxunit']['download']['url']}"
+remote_file "#{Chef::Config['file_cache_path']}/Cloudy-With-A-Chance-Of-Tests-develop.zip" do
+  source "#{node['cloudy']['download']['url']}"
   action :create_if_missing
   mode "0744"
   owner "root"
   group "root"
-  not_if { File.directory?("#{node['mxunit']['install_path']}/mxunit") }
+  not_if { File.directory?("#{node['cloudy']['install_path']}/cloudy") }
 end
 
 # Extract archive
 
-script "install_mxunit" do
+script "install_cloudy" do
   interpreter "bash"
   user "root"
   cwd "#{Chef::Config['file_cache_path']}"
   code <<-EOH
-unzip mxunit-2.1.1.zip 
-mv mxunit #{node['mxunit']['install_path']}
-chown -R nobody:bin #{node['mxunit']['install_path']}/mxunit
+unzip cloudy-2.1.1.zip 
+mv cloudy #{node['cloudy']['install_path']}
+chown -R nobody:bin #{node['cloudy']['install_path']}/cloudy
 EOH
-  not_if { File.directory?("#{node['mxunit']['install_path']}/mxunit") }
+  not_if { File.directory?("#{node['cloudy']['install_path']}/cloudy") }
 end
 
 # Set up ColdFusion mapping
 
-execute "start_cf_for_mxunit_default_cf_config" do
+execute "start_cf_for_cloudy_default_cf_config" do
   command "/bin/true"
   notifies :start, "service[coldfusion]", :immediately
 end
-
-coldfusion902_config "extensions" do
-  action :set
-  property "mapping"
-  args ({ "mapName" => "/mxunit",
-          "mapPath" => "#{node['mxunit']['install_path']}/mxunit"})
-end
-
-
