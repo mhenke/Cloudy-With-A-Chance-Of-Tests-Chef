@@ -64,3 +64,4 @@ end
 execute "start_cf_for_cloudy_default_cf_config" do
   command "/bin/true"
   notifies :start, "service[coldfusion]", :immediately
+end
