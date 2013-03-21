@@ -1,8 +1,6 @@
-# MXUnit Attributes
-default['mxunit']['install_path'] = "/vagrant/wwwroot"
-default['mxunit']['owner'] = nil
-default['mxunit']['group'] = "bin"
-default['mxunit']['download']['url'] = "https://github.com/downloads/mxunit/mxunit/mxunit-2.1.1.zip"
-default['mxunit']['create_apache_alias'] = false
-
-
+# cloudy Attributes
+default['cloudy']['install_path'] = "/vagrant/wwwroot"
+default['cloudy']['owner'] = nil
+default['cloudy']['group'] = "bin"
+default['cloudy']['download']['url'] = "https://github.com/mhenke/Cloudy-With-A-Chance-Of-Tests/archive/develop.zip"
+default['cloudy']['create_apache_alias'] = false
