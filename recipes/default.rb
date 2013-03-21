@@ -35,7 +35,7 @@ remote_file "#{Chef::Config['file_cache_path']}/#{file_name}" do
   mode "0744"
   owner "root"
   group "root"
-  not_if { File.directory?("#{node['cloudy']['install_path']}/cloudy") }
+  not_if { File.directory?("#{node['cloudy']['install_path']}") }
 end
 
 # Create the target install directory if it doesn't exist
@@ -58,9 +58,9 @@ script "install_cloudy" do
   code <<-EOH
 unzip #{file_name} 
 mv cloudy #{node['cloudy']['install_path']}
-chown -R #{node['cloudy']['owner']}:#{node['cloudy']['group']} #{node['cloudy']['install_path']}/cloudy
+chown -R #{node['cloudy']['owner']}:#{node['cloudy']['group']} #{node['cloudy']['install_path']}
 EOH
-  not_if { File.directory?("#{node['cloudy']['install_path']}/cloudy") }
+  not_if { File.directory?("#{node['cloudy']['install_path']}") }
 end
 
 # Set up ColdFusion mapping
@@ -73,8 +73,8 @@ end
 coldfusion10_config "extensions" do
   action :set
   property "mapping"
-  args ({ "mapName" => "/cloudy",
-          "mapPath" => "#{node['cloudy']['install_path']}/cloudy"})
+  args ({ "mapName" => "",
+          "mapPath" => "#{node['cloudy']['install_path']}"})
 end
 
 # Create a global apache alias if desired
@@ -84,8 +84,8 @@ template "#{node['apache']['dir']}/conf.d/global-cloudy-alias" do
   group node['apache']['group']
   mode "0755"
   variables(
-    :url_path => '/cloudy',
-    :file_path => "#{node['cloudy']['install_path']}/cloudy"
+    :url_path => '',
+    :file_path => "#{node['cloudy']['install_path']}"
   )
   only_if { node['cloudy']['create_apache_alias'] }
   notifies :restart, "service[apache2]"
