@@ -19,10 +19,6 @@
 
 # Install the unzip package
 
-package "unzip" do
-  action :install
-end
-
 file_name = node['cloudy']['download']['url'].split('/').last
 
 node.set['cloudy']['owner'] = node['cf10']['installer']['runtimeuser'] if node['cloudy']['owner'] == nil
@@ -35,7 +31,7 @@ remote_file "#{Chef::Config['file_cache_path']}/#{file_name}" do
   mode "0744"
   owner "root"
   group "root"
-  not_if { File.directory?("#{node['cloudy']['install_path']}") }
+  not_if { File.directory?("#{node['cloudy']['install_path']}/develop") }
 end
 
 # Create the target install directory if it doesn't exist
@@ -58,9 +54,9 @@ script "install_cloudy" do
   code <<-EOH
 unzip #{file_name} 
 mv cloudy #{node['cloudy']['install_path']}
-chown -R #{node['cloudy']['owner']}:#{node['cloudy']['group']} #{node['cloudy']['install_path']}
+chown -R #{node['cloudy']['owner']}:#{node['cloudy']['group']} #{node['cloudy']['install_path']}/develop
 EOH
-  not_if { File.directory?("#{node['cloudy']['install_path']}") }
+  not_if { File.directory?("#{node['cloudy']['install_path']}/develop") }
 end
 
 # Set up ColdFusion mapping
@@ -68,27 +64,3 @@ end
 execute "start_cf_for_cloudy_default_cf_config" do
   command "/bin/true"
   notifies :start, "service[coldfusion]", :immediately
-end
-
-coldfusion10_config "extensions" do
-  action :set
-  property "mapping"
-  args ({ "mapName" => "",
-          "mapPath" => "#{node['cloudy']['install_path']}"})
-end
-
-# Create a global apache alias if desired
-template "#{node['apache']['dir']}/conf.d/global-cloudy-alias" do
-  source "global-cloudy-alias.erb"
-  owner node['apache']['user']
-  group node['apache']['group']
-  mode "0755"
-  variables(
-    :url_path => '',
-    :file_path => "#{node['cloudy']['install_path']}"
-  )
-  only_if { node['cloudy']['create_apache_alias'] }
-  notifies :restart, "service[apache2]"
-end
-
-
