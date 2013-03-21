@@ -1,15 +1,16 @@
-name             "mxunit"
+name             "cloudy"
 maintainer       "NATHAN MISCHE"
 maintainer_email "nmische@gmail.com"
 license          "Apache 2.0"
-description      "Installs/Configures MXUnit"
+description      "Installs/Configures cloudy"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "0.2.0"
+version          "0.0.1"
 
 %w{ centos redhat ubuntu }.each do |os|
   supports os
 end
 
-depends "coldfusion10"
+depends "zip"
+depends "ant"
 
-recipe "mxunit", "Installs MXUnit and adds a ColdFusion mapping."
+recipe "cloudy", "Installs Cloudy With A Chance Of Tests."
