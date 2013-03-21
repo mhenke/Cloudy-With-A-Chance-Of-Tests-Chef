@@ -17,21 +17,30 @@
 # limitations under the License.
 #
 
-# Install the unzip package
+file_name = node['cloudy']['download']['url'].split('/').last
 
-package "unzip" do
-  action :install
-end
+node.set['cloudy']['owner'] = node['cf10']['installer']['runtimeuser'] if node['cloudy']['owner'] == nil
 
 # Download cloudy
 
-remote_file "#{Chef::Config['file_cache_path']}/Cloudy-With-A-Chance-Of-Tests-develop.zip" do
+remote_file "#{Chef::Config['file_cache_path']}/#{file_name}" do
   source "#{node['cloudy']['download']['url']}"
   action :create_if_missing
   mode "0744"
   owner "root"
   group "root"
-  not_if { File.directory?("#{node['cloudy']['install_path']}/cloudy") }
+  not_if { File.directory?("#{node['cloudy']['install_path']}") }
+end
+
+# Create the target install directory if it doesn't exist
+
+directory "#{node['cloudy']['install_path']}" do
+  owner node['cloudy']['owner']
+  group node['cloudy']['group']
+  mode "0755"
+  recursive true
+  action :create
+  not_if { File.directory?("#{node['cloudy']['install_path']}") }
 end
 
 # Extract archive
@@ -41,9 +50,9 @@ script "install_cloudy" do
   user "root"
   cwd "#{Chef::Config['file_cache_path']}"
   code <<-EOH
-unzip Cloudy-With-A-Chance-Of-Tests-develop.zip
-mv Cloudy-With-A-Chance-Of-Tests-develop #{node['cloudy']['install_path']}
-chown -R nobody:bin #{node['cloudy']['install_path']}
+unzip #{file_name} 
+mv cloudy #{node['cloudy']['install_path']}
+chown -R #{node['cloudy']['owner']}:#{node['cloudy']['group']} #{node['cloudy']['install_path']}
 EOH
   not_if { File.directory?("#{node['cloudy']['install_path']}") }
 end
@@ -53,4 +62,25 @@ end
 execute "start_cf_for_cloudy_default_cf_config" do
   command "/bin/true"
   notifies :start, "service[coldfusion]", :immediately
+end
+
+coldfusion10_config "extensions" do
+  action :set
+  property "mapping"
+  args ({ "mapName" => "",
+          "mapPath" => "#{node['cloudy']['install_path']}"})
+end
+
+# Create a global apache alias if desired
+template "#{node['apache']['dir']}/conf.d/global-cloudy-alias" do
+  source "global-cloudy-alias.erb"
+  owner node['apache']['user']
+  group node['apache']['group']
+  mode "0755"
+  variables(
+    :url_path => '',
+    :file_path => "#{node['cloudy']['install_path']}"
+  )
+  only_if { node['cloudy']['create_apache_alias'] }
+  notifies :restart, "service[apache2]"
 end
