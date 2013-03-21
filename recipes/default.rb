@@ -53,10 +53,10 @@ script "install_cloudy" do
   cwd "#{Chef::Config['file_cache_path']}"
   code <<-EOH
 unzip #{file_name} 
-mv cloudy #{node['cloudy']['install_path']}
-chown -R #{node['cloudy']['owner']}:#{node['cloudy']['group']} #{node['cloudy']['install_path']}/develop
+mv Cloudy-With-A-Chance-Of-Tests-develop #{node['cloudy']['install_path']}
+chown -R #{node['cloudy']['owner']}:#{node['cloudy']['group']} #{node['cloudy']['install_path']}/Cloudy-With-A-Chance-Of-Tests-develop
 EOH
-  not_if { File.directory?("#{node['cloudy']['install_path']}/develop") }
+  not_if { File.directory?("#{node['cloudy']['install_path']}/Cloudy-With-A-Chance-Of-Tests-develop") }
 end
 
 # Set up ColdFusion mapping
