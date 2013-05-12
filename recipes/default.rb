@@ -57,9 +57,8 @@ mv Cloudy-With-A-Chance-Of-Tests-develop/* #{node['cloudy']['install_path']}
 chown -R #{node['cloudy']['owner']}:#{node['cloudy']['group']} #{node['cloudy']['install_path']}
 EOH
   not_if { File.directory?("#{node['cloudy']['install_path']}/Cloudy-With-A-Chance-Of-Tests-develop") }
+rm  #{file_name} 
 end
-
-# Set up ColdFusion mapping
 
 execute "start_cf_for_cloudy_default_cf_config" do
   command "/bin/true"
