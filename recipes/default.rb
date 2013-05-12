@@ -52,10 +52,15 @@ unzip #{file_name}
 mv Cloudy-With-A-Chance-Of-Tests-develop/* #{node['cloudy']['install_path']}
 chown -R #{node['cloudy']['owner']}:#{node['cloudy']['group']} #{node['cloudy']['install_path']}
 EOH
-  not_if { File.directory?("#{node['cloudy']['install_path']}/Cloudy-With-A-Chance-Of-Tests-develop") }
+  not_if { File.directory?("#{node['cloudy']['install_path']}/lib-cloudy") }
 end
 
-execute "start_cf_for_cloudy_default_cf_config" do
-  command "/bin/true"
-  notifies :start, "service[coldfusion]", :immediately
+#Clean Up
+file "#{Chef::Config['file_cache_path']}/#{file_name}" do
+  action :delete
+end
+
+directory "#{Chef::Config['file_cache_path']}/Cloudy-With-A-Chance-Of-Tests-develop" do
+  recursive true
+  action :delete
 end
