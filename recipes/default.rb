@@ -55,7 +55,7 @@ EOH
   not_if { File.directory?("#{node['cloudy']['install_path']}/lib-cloudy") }
 end
 
-#Clean Up
+# Clean Up
 file "#{Chef::Config['file_cache_path']}/#{file_name}" do
   action :delete
 end
