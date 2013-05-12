@@ -55,9 +55,9 @@ script "install_cloudy" do
 unzip #{file_name} 
 mv Cloudy-With-A-Chance-Of-Tests-develop/* #{node['cloudy']['install_path']}
 chown -R #{node['cloudy']['owner']}:#{node['cloudy']['group']} #{node['cloudy']['install_path']}
+rm  #{file_name}
+rm -rf Cloudy-With-A-Chance-Of-Tests-develop
 EOH
-  rm  #{file_name}
-  rm -rf {'Cloudy-With-A-Chance-Of-Tests-develop'}
   not_if { File.directory?("#{node['cloudy']['install_path']}/Cloudy-With-A-Chance-Of-Tests-develop") }
 end
 
