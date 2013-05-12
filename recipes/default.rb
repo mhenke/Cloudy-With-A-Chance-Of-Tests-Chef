@@ -2,7 +2,7 @@
 # Cookbook Name:: cloudy
 # Recipe:: default
 #
-# Copyright 2012, Nathan Mische
+# Copyright 2012, Mike Henke
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,24 +18,21 @@
 #
 
 # Install the unzip package
-
 file_name = node['cloudy']['download']['url'].split('/').last
 
 node.set['cloudy']['owner'] = node['cf10']['installer']['runtimeuser'] if node['cloudy']['owner'] == nil
 
 # Download cloudy
-
 remote_file "#{Chef::Config['file_cache_path']}/#{file_name}" do
   source "#{node['cloudy']['download']['url']}"
   action :create_if_missing
   mode "0744"
   owner "root"
   group "root"
-  not_if { File.directory?("#{node['cloudy']['install_path']}/develop") }
+  not_if { File.directory?("#{Chef::Config['file_cache_path']}/#{file_name}") }
 end
 
 # Create the target install directory if it doesn't exist
-
 directory "#{node['cloudy']['install_path']}" do
   owner node['cloudy']['owner']
   group node['cloudy']['group']
@@ -46,7 +43,6 @@ directory "#{node['cloudy']['install_path']}" do
 end
 
 # Extract archive
-
 script "install_cloudy" do
   interpreter "bash"
   user "root"
@@ -55,8 +51,6 @@ script "install_cloudy" do
 unzip #{file_name} 
 mv Cloudy-With-A-Chance-Of-Tests-develop/* #{node['cloudy']['install_path']}
 chown -R #{node['cloudy']['owner']}:#{node['cloudy']['group']} #{node['cloudy']['install_path']}
-rm  #{file_name}
-rm -rf Cloudy-With-A-Chance-Of-Tests-develop
 EOH
   not_if { File.directory?("#{node['cloudy']['install_path']}/Cloudy-With-A-Chance-Of-Tests-develop") }
 end

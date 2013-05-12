@@ -1,5 +1,5 @@
 name             "cloudy"
-maintainer       "NATHAN MISCHE"
+maintainer       "Mike Henke"
 maintainer_email "henke.mike@gmail.com"
 license          "Apache 2.0"
 description      "Installs/Configures Cloudy With A Chance Of Tests"
