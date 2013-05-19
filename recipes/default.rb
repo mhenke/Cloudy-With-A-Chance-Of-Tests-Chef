@@ -55,13 +55,24 @@ EOH
   not_if { File.directory?("#{node['cloudy']['install_path']}/lib-cloudy") }
 end
 
-# create a job for jenkins call cloudy
+# create path jenkins job cloudy
+directory "/var/lib/jenkins/jobs/cloudy/" do
+  owner "root"
+  group "root"
+  mode "0777"
+  recursive true
+  action :create
+  not_if { File.directory?("/var/lib/jenkins/jobs/cloudy/") }
+end
+
+# copy the config for jenkins job cloudy
 template "config.xml" do
   path "/var/lib/jenkins/jobs/cloudy/config.xml"
   source "cloudy-job-config.erb"
   owner "root"
   group "root"
   mode "0777"
+  not_if { File.exists?("/var/lib/jenkins/jobs/cloudy/config.xml") }
 end
 
 # Clean Up
