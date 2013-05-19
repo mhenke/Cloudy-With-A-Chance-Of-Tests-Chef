@@ -55,6 +55,15 @@ EOH
   not_if { File.directory?("#{node['cloudy']['install_path']}/lib-cloudy") }
 end
 
+# create a job for jenkins call cloudy
+template "config.xml" do
+  path "/var/lib/jenkins/jobs/cloudy/config.xml"
+  source "cloudy-job-config.erb"
+  owner "root"
+  group "root"
+  mode "0777"
+end
+
 # Clean Up
 file "#{Chef::Config['file_cache_path']}/#{file_name}" do
   action :delete
