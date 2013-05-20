@@ -18,7 +18,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <name>master</name>
+        <name></name>
         <refspec></refspec>
         <url>git://github.com/mhenke/cf-datatables.git</url>
       </hudson.plugins.git.UserRemoteConfig>
@@ -55,11 +55,7 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers class="vector">
-    <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.6">
-      <spec></spec>
-    </com.cloudbees.jenkins.GitHubPushTrigger>
-  </triggers>
+  <triggers class="vector"/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Ant plugin="ant@1.2">
@@ -67,30 +63,6 @@
     </hudson.tasks.Ant>
   </builders>
   <publishers>
-    <hudson.plugins.jslint.CheckStylePublisher plugin="jslint-checkstyle@3.35">
-      <healthy></healthy>
-      <unHealthy></unHealthy>
-      <thresholdLimit>low</thresholdLimit>
-      <pluginName>[JSLINT] </pluginName>
-      <defaultEncoding></defaultEncoding>
-      <canRunOnFailed>false</canRunOnFailed>
-      <useStableBuildAsReference>false</useStableBuildAsReference>
-      <useDeltaValues>false</useDeltaValues>
-      <thresholds plugin="analysis-core@1.49">
-        <unstableTotalAll></unstableTotalAll>
-        <unstableTotalHigh></unstableTotalHigh>
-        <unstableTotalNormal></unstableTotalNormal>
-        <unstableTotalLow></unstableTotalLow>
-        <failedTotalAll></failedTotalAll>
-        <failedTotalHigh></failedTotalHigh>
-        <failedTotalNormal></failedTotalNormal>
-        <failedTotalLow></failedTotalLow>
-      </thresholds>
-      <shouldDetectModules>false</shouldDetectModules>
-      <dontComputeNew>true</dontComputeNew>
-      <doNotResolveRelativePaths>false</doNotResolveRelativePaths>
-      <pattern>**/jslint-checkstyle.xml</pattern>
-    </hudson.plugins.jslint.CheckStylePublisher>
     <hudson.plugins.dry.DryPublisher plugin="dry@2.34">
       <healthy></healthy>
       <unHealthy></unHealthy>
@@ -113,7 +85,7 @@
       <shouldDetectModules>false</shouldDetectModules>
       <dontComputeNew>true</dontComputeNew>
       <doNotResolveRelativePaths>false</doNotResolveRelativePaths>
-      <pattern>**/cpd.xml</pattern>
+      <pattern> **/cpd.xml</pattern>
       <highThreshold>50</highThreshold>
       <normalThreshold>25</normalThreshold>
     </hudson.plugins.dry.DryPublisher>
@@ -143,7 +115,7 @@
       <normal></normal>
       <low></low>
       <ignoreCase>false</ignoreCase>
-      <pattern> **/*.cfm,  **/*.cfc, **/*.cfc</pattern>
+      <pattern> **/*.cfc, **/*.cfml, **/*.cfm</pattern>
       <excludePattern></excludePattern>
     </hudson.plugins.tasks.TasksPublisher>
     <hudson.plugins.violations.ViolationsPublisher plugin="violations@0.7.11">
@@ -180,7 +152,7 @@
               <max>999</max>
               <unstable>999</unstable>
               <usePattern>false</usePattern>
-              <pattern>**/cpd.xml</pattern>
+              <pattern> **/cpd.xml</pattern>
             </hudson.plugins.violations.TypeConfig>
           </entry>
           <entry>
@@ -202,7 +174,7 @@
               <max>999</max>
               <unstable>999</unstable>
               <usePattern>false</usePattern>
-              <pattern>**/csslint.xml</pattern>
+              <pattern> **/csslint.xml</pattern>
             </hudson.plugins.violations.TypeConfig>
           </entry>
           <entry>
@@ -257,7 +229,7 @@
               <max>999</max>
               <unstable>999</unstable>
               <usePattern>false</usePattern>
-              <pattern>**/jslint.xml</pattern>
+              <pattern> **/jslint.xml</pattern>
             </hudson.plugins.violations.TypeConfig>
           </entry>
           <entry>
