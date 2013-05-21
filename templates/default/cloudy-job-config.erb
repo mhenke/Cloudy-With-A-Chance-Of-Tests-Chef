@@ -118,6 +118,11 @@
       <pattern> **/*.cfc, **/*.cfml, **/*.cfm</pattern>
       <excludePattern></excludePattern>
     </hudson.plugins.tasks.TasksPublisher>
+    <hudson.tasks.junit.JUnitResultArchiver>
+      <testResults>tests/testresults/xml/**/*.xml</testResults>
+      <keepLongStdio>false</keepLongStdio>
+      <testDataPublishers/>
+    </hudson.tasks.junit.JUnitResultArchiver>
     <hudson.plugins.violations.ViolationsPublisher plugin="violations@0.7.11">
       <config>
         <suppressions class="sorted-set"/>
