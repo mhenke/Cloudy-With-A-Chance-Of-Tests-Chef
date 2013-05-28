@@ -84,11 +84,3 @@ directory "#{Chef::Config['file_cache_path']}/Cloudy-With-A-Chance-Of-Tests-deve
   recursive true
   action :delete
 end
-
-file "/vagrant/install_jenkins.txt" do
-  owner "root"
-  group "root"
-  mode 00755
-  action :create
-  not_if { ::File.exists?("/vagrant/installed_jenkins.txt")}
-end
